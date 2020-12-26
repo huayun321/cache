@@ -1,0 +1,23 @@
+package cache
+
+import "log"
+
+type Cache interface {
+	Set(key string, value []byte) error
+	Get(key string) ([]byte, error)
+	Del(key string) error
+	GetStat() Stat
+}
+
+func New(typ string) Cache {
+	var c Cache
+	if typ == "inmemory" {
+		c = newInMemoryCache()
+	}
+	if c == nil {
+		panic("unknown cache type " + typ)
+	}
+	log.Println(typ, "ready to serve")
+
+	return c
+}
